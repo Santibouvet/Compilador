@@ -1,6 +1,6 @@
 inicio
     @x := 10; 
-    escribir @x;
+    escribir(@x);
 fin
 
 
