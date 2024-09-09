@@ -17,7 +17,6 @@ constEntera {digito}({digito})*
 "fin" {return FIN;}
 "leer" {return LEER;}
 "escribir" {return ESCRIBIR;}
-{EOF} {return FDT;}
 {identificador} {sscanf(yytext, "%s", yylval.cadena); return ID;}
 "," {return COMA;}
 ";" {return PYCOMA;}
@@ -25,5 +24,4 @@ constEntera {digito}({digito})*
 ")" {return PARENDERECHO;}
 "+" {return SUMA;}
 "-" {return RESTA;}
-
 %%

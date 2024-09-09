@@ -18,7 +18,7 @@ extern int yywrap();
 %token <num> CONSTANTE
 %%
 
-objetivo: programa FDT
+/*objetivo: programa FDT*/
 
 programa: INICIO listaSentencias FIN
 ;
