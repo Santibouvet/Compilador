@@ -79,12 +79,13 @@ extern int yyleng;
 extern int yylex(void);
 extern void yyerror(char*);
 
+extern int yylineno;
 extern int yynerrs;
 extern int yylexerrs;
 extern FILE* yyin;
 
 
-#line 88 "y.tab.c"
+#line 89 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -167,12 +168,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "sintactico.y"
+#line 18 "sintactico.y"
 
    char* cadena;
    int num;
 
-#line 176 "y.tab.c"
+#line 177 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -605,8 +606,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    26,    26,    29,    30,    33,    33,    34,    35,    38,
-      39,    42,    43,    46,    47,    49,    50,    51,    53,    54
+       0,    27,    27,    30,    31,    34,    34,    35,    36,    39,
+      40,    43,    44,    47,    48,    50,    51,    52,    54,    55
 };
 #endif
 
@@ -1184,19 +1185,19 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* programa: INICIO listaSentencias FIN  */
-#line 26 "sintactico.y"
-                                      {if (yynerrs || yylexerrs) YYABORT; return -1;}
-#line 1190 "y.tab.c"
+#line 27 "sintactico.y"
+                                      {if (yynerrs || yylexerrs) YYABORT;}
+#line 1191 "y.tab.c"
     break;
 
   case 5: /* $@1: %empty  */
-#line 33 "sintactico.y"
-              {if(yyleng>32){ yyerror("Error lexico, se excedio la longitud maxima para un identificador"); yylexerrs++;}}
-#line 1196 "y.tab.c"
+#line 34 "sintactico.y"
+              {if(yyleng>32){ printf("Error lexico: se excedio la longitud maxima para un identificador"); yylexerrs++;}}
+#line 1197 "y.tab.c"
     break;
 
 
-#line 1200 "y.tab.c"
+#line 1201 "y.tab.c"
 
       default: break;
     }
@@ -1389,40 +1390,46 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 56 "sintactico.y"
+#line 57 "sintactico.y"
 
 
-void yyerror (char *error)
-{
-   printf ("\nSe encontro un: %s\n",error);
+void yyerror(char *s) {
+    fprintf(stderr, "\nError sintáctico: %s en la línea %d\n", s, yylineno);
+      if (yytext) {
+        fprintf(stderr, "                  -> Provocado por el token: %s\n", yytext);
+    }
 }
+
 
 
 int main(int argc, char** argv) 
 {
 
-   // Argumentos
-   if (argc > 2){
-        printf("Numero incorrecto de argumentos.");
-        return EXIT_FAILURE;
+   if ( argc == 1 )
+   {
+      printf("Debe ingresar el nombre del archivo fuente (en lenguaje Micro) en la linea de comandos\n");
+      return -1;
    }
-   else if (argc == 2) {
-      char filename[50];
-      sprintf(filename, "%s", argv[1]);
-      int largo = strlen(filename);
-
-      if (argv[1][largo-1] != 'm' || argv[1][largo-2] != '.') {
-         printf("Extension incorrecta (debe ser .m)");
-         return EXIT_FAILURE;
-      }
-
-      yyin = fopen(filename, "r");
-      if (yyin == NULL) {
-         perror("Error al abrir el archivo");
-         return EXIT_FAILURE;
-      }
+   else if ( argc != 2 )
+   {
+      printf("Numero incorrecto de argumentos\n");
+      return -1;
    }
-  
+   char filename[50];
+   sprintf(filename, "%s", argv[1]);
+   int largo = strlen(filename);
+
+   if (argv[1][largo-1] != 'm' || argv[1][largo-2] != '.') {
+      printf("Extension incorrecta (debe ser .m)");
+      return EXIT_FAILURE;
+   }
+
+   yyin = fopen(filename, "r");
+   if (yyin == NULL) {
+      perror("Error al abrir el archivo");
+      return EXIT_FAILURE;
+   }
+   
    switch (yyparse()){
       case 0: printf("\nProceso de compilacion termino exitosamente");
       break;
@@ -1430,9 +1437,10 @@ int main(int argc, char** argv)
       break;
       case 2: printf("\nNo hay memoria suficiente");
       break;
-    }
-    printf("\nErrores sintacticos: %i\tErrores lexicos: %i\n", yynerrs, yylexerrs);
-    return 0;
+   }
+   printf("\nErrores sintacticos: %i\tErrores lexicos: %i\n", yynerrs, yylexerrs);
+   fclose(yyin);
+   return 0;
 }
 
 

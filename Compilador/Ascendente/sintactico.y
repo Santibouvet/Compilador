@@ -9,6 +9,7 @@ extern int yyleng;
 extern int yylex(void);
 extern void yyerror(char*);
 
+extern int yylineno;
 extern int yynerrs;
 extern int yylexerrs;
 extern FILE* yyin;
@@ -23,14 +24,14 @@ extern FILE* yyin;
 %token <num> CONSTANTE
 %%
 
-programa: INICIO listaSentencias FIN  {if (yynerrs || yylexerrs) YYABORT; return -1;}
+programa: INICIO listaSentencias FIN  {if (yynerrs || yylexerrs) YYABORT;}
 ;
 
 listaSentencias: listaSentencias sentencia 
 |sentencia
 ;
 
-sentencia: ID {if(yyleng>32){ yyerror("Error lexico, se excedio la longitud maxima para un identificador"); yylexerrs++;}} ASIGNACION expresion PYCOMA 
+sentencia: ID {if(yyleng>32){ printf("Error lexico: se excedio la longitud maxima para un identificador"); yylexerrs++;}} ASIGNACION expresion PYCOMA 
 | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PYCOMA 
 | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PYCOMA
 ;
@@ -55,10 +56,13 @@ operadorAditivo: SUMA
 ;
 %%
 
-void yyerror (char *error)
-{
-   printf ("\nSe encontro un: %s\n",error);
+void yyerror(char *s) {
+    fprintf(stderr, "\nError sintáctico: %s en la línea %d\n", s, yylineno);
+      if (yytext) {
+        fprintf(stderr, "                  -> Provocado por el token: %s\n", yytext);
+    }
 }
+
 
 
 int main(int argc, char** argv) 
@@ -98,6 +102,7 @@ int main(int argc, char** argv)
       break;
    }
    printf("\nErrores sintacticos: %i\tErrores lexicos: %i\n", yynerrs, yylexerrs);
+   fclose(yyin);
    return 0;
 }
 

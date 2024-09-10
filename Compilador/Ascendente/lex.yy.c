@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 16
-#define YY_END_OF_BUFFER 17
+#define YY_NUM_RULES 17
+#define YY_END_OF_BUFFER 18
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,8 +362,8 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[41] =
     {   0,
-        0,    0,   17,   15,   14,   14,   10,   11,   12,    8,
-       13,    2,   15,    9,    7,    7,    7,    7,    7,    2,
+        0,    0,   18,   16,   15,   14,   10,   11,   12,    8,
+       13,    2,   16,    9,    7,    7,    7,    7,    7,    2,
         1,    7,    7,    7,    7,    7,    7,    4,    7,    7,
         7,    7,    5,    7,    7,    7,    3,    7,    6,    0
     } ;
@@ -470,11 +470,10 @@ char *yytext;
 
 void yyerror(char *s);
 int yylex();
-
-char buffer[42];
+int yylineno;
 int yylexerrs = 0;
+#line 476 "lex.yy.c"
 #line 477 "lex.yy.c"
-#line 478 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -691,9 +690,9 @@ YY_DECL
 		}
 
 	{
-#line 20 "lexico.l"
+#line 19 "lexico.l"
 
-#line 697 "lex.yy.c"
+#line 696 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -752,86 +751,92 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 21 "lexico.l"
+#line 20 "lexico.l"
 {return ASIGNACION;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 22 "lexico.l"
+#line 21 "lexico.l"
 {yylval.num=atoi(yytext);return CONSTANTE;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 23 "lexico.l"
+#line 22 "lexico.l"
 {return INICIO;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "lexico.l"
+#line 23 "lexico.l"
 {return FIN;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "lexico.l"
+#line 24 "lexico.l"
 {return LEER;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 26 "lexico.l"
+#line 25 "lexico.l"
 {return ESCRIBIR;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 27 "lexico.l"
+#line 26 "lexico.l"
 {yylval.cadena = strdup(yytext); return ID;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 28 "lexico.l"
+#line 27 "lexico.l"
 {return COMA;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 29 "lexico.l"
+#line 28 "lexico.l"
 {return PYCOMA;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 30 "lexico.l"
+#line 29 "lexico.l"
 {return PARENIZQUIERDO;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "lexico.l"
+#line 30 "lexico.l"
 {return PARENDERECHO;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "lexico.l"
+#line 31 "lexico.l"
 {return SUMA;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 33 "lexico.l"
+#line 32 "lexico.l"
 {return RESTA;}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
+#line 33 "lexico.l"
+{ yylineno++; }
+	YY_BREAK
+case 15:
+/* rule 15 can match eol */
+YY_RULE_SETUP
 #line 34 "lexico.l"
 {/*ignora espacios en blanco*/}
 	YY_BREAK
-case 15:
+case 16:
 YY_RULE_SETUP
 #line 35 "lexico.l"
-{yylexerrs++; sprintf(buffer,"Error Lexico: %s", yytext); yyerror(buffer);}
+{yylexerrs++; printf("Error léxico: %s es un carácter inválido\n", yytext); return 0;}
 	YY_BREAK
-case 16:
+case 17:
 YY_RULE_SETUP
 #line 36 "lexico.l"
 ECHO;
 	YY_BREAK
-#line 835 "lex.yy.c"
+#line 840 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

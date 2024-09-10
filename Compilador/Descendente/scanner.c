@@ -6,7 +6,7 @@
 #define NUMESTADOS 15
 #define NUMCOLS 13
 #define TAMLEX 32+1
-#define TAMNOM 20+1
+#define TAMNOM 40+1
 /******************Declaraciones Globales*************************/
 FILE * in;
 typedef enum

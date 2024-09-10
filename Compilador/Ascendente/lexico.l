@@ -6,8 +6,7 @@
 
 void yyerror(char *s);
 int yylex();
-
-char buffer[42];
+int yylineno;
 int yylexerrs = 0;
 %}
 digito [0-9]
@@ -31,8 +30,9 @@ constEntera {digito}({digito})*
 ")" {return PARENDERECHO;}
 "+" {return SUMA;}
 "-" {return RESTA;}
+\n  { yylineno++; }
 [ \t\n] {/*ignora espacios en blanco*/}
-. {yylexerrs++; sprintf(buffer,"Error Lexico, %s es un caracter invalido", yytext); yyerror(buffer);}
+. {yylexerrs++; printf("Error léxico: %s es un carácter inválido\n", yytext); return 0;}
 %%
 
 int yywrap(void)
